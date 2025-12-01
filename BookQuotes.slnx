@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="BookQuotes/BookQuotes.csproj" />
+  <Project Path="BookQuotes/BookQuotes.csproj">
+    <BuildDependency Project="BooksQuotesRepository/BookQuotesRepository.csproj" />
+  </Project>
+  <Project Path="BooksQuotesRepository/BookQuotesRepository.csproj" Id="aa0ae6e1-4418-4fbe-878e-b08a8e4e96ce" />
 </Solution>

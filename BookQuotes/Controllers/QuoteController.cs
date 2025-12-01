@@ -1,4 +1,5 @@
-﻿using BookQuotes.Models;
+﻿using BookQuotesRepository;
+using BookQuotesRepository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +13,7 @@ namespace BookQuotes.Controllers
         private readonly IRepository _localRepository = localRepository;
 
         [HttpGet( Name = "GetQuotes" )]
-        public IEnumerable<Quote> GetAll( )
+        public IEnumerable<IQuote> GetAll( )
         {
             return _localRepository.Quotes;
         }

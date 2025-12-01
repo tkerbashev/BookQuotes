@@ -1,4 +1,5 @@
 using BookQuotes;
+using BookQuotesRepository;
 using Microsoft.OpenApi;
 
 
@@ -7,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddSingleton<IRepository, LocalRepository>( );
+//builder.Services.AddSingleton<IRepository, LocalRepository>( );
+builder.Services.AddSingleton<IRepository, DbRepository>( );
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

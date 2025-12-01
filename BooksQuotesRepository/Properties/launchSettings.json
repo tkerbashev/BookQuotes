@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "BookQuotesRepository": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

@@ -1,36 +1,47 @@
-﻿using BookQuotes.Models;
+﻿using BookQuotesRepository.Interfaces;
+using BookQuotesRepository.Models;
 
-namespace BookQuotes
+namespace BookQuotesRepository
 {
     public class LocalRepository : IRepository
     {
-        public Author[ ] Authors
+        private static IUser[ ] Users
+        {
+            get
+            {
+                var admin = new User( "admin", "password", "Default", "Admin", [ "list_authors", "list_books" ] );
+                var user = new User( "other", "password", "Other", "User", [] );
+                return [ admin, user ];
+            }
+        }
+
+        public IAuthor[ ] Authors
         {
             get
             {
                 var frank = new Author( "Frank", "Herbert" );
-                var ray = new Author( "Ray", "Bradbury" );
+                var ray = new Author( "Ray", "Bradbury");
 
                 return [ frank, ray ];
             }
         }
 
-        public Book[ ] Books
+        public IBook[ ] Books
         {
             get
             {
-                var bookFrank = new Book( "Dune", Authors.FirstOrDefault( author => author.FirstName == "Frank" )! );
-                var bookRay = new Book( "Fahrenheit 451", Authors.FirstOrDefault( author => author.FirstName == "Ray" )! );
+                var bookFrank = new Book( "Dune", Authors.FirstOrDefault( author => author.FirstName == "Frank" )!);
+                var bookRay = new Book( "Fahrenheit 451", Authors.FirstOrDefault( author => author.FirstName == "Ray" )!);
 
                 return [ bookFrank, bookRay ];
             }
         }
 
-        public Quote[ ] Quotes
+        public IQuote[ ] Quotes
         {
             get
             {
-                var result = new List<Quote>( );
+                var result = new List<IQuote>( );
 
                 var quotesFrank = new List<string>
                 {
@@ -58,8 +69,23 @@ namespace BookQuotes
                     result.Add( quote );
                 }
 
-                return result.ToArray( );
+                return [ .. result ];
             }
+        }
+
+        public bool ValidateUserCredentials( string? username, string? password, out IUser? user )
+        {
+            foreach ( var existingUser in Users )
+            {
+                if ( existingUser.UserName == username && existingUser.Password == password )
+                {
+                    user = existingUser;
+                    return true;
+                }
+            }
+
+            user = null;
+            return false;
         }
     }
 }

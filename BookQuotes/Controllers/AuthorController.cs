@@ -1,4 +1,5 @@
-﻿using BookQuotes.Models;
+﻿using BookQuotesRepository;
+using BookQuotesRepository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,8 +13,9 @@ namespace BookQuotes.Controllers
         private readonly IRepository _localRepository = localRepository;
 
         [HttpGet( Name = "GetAuthors" )]
-        public IEnumerable<Author> GetAll( )
+        public IEnumerable<IAuthor> GetAll( )
         {
+            // Food for thought: Do we really need to check for "true"?
             if (User.Claims.FirstOrDefault( static c => c.Type == "list_authors" )?.Value != "true")
             {
                 Response.StatusCode = 403;
