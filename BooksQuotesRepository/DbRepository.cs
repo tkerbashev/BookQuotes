@@ -104,8 +104,9 @@ namespace BookQuotesRepository
                 $@"SELECT FirstName, LastName, Claim
                 FROM Users
                 LEFT OUTER JOIN Claims ON Users.Username = Claims.Username
-                WHERE Users.Username = @username",
-                new SqliteParameter( "username", username ) ) ];
+                WHERE Users.Username = @username AND Users.Password = @password",
+                new SqliteParameter( "username", username ),
+                new SqliteParameter( "password", password )) ];
 
             if ( users.Count > 0)
             {

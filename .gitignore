@@ -362,3 +362,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+.vscode
+/BookQuotesUI/.editorconfig
+/BookQuotesUI/.github/copilot-instructions.md
+/BookQuotesUI/.gitignore

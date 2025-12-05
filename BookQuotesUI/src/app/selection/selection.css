@@ -1,0 +1,12 @@
+.container {
+  display: flex; /* Makes the container a flex container */
+  justify-content: space-evenly; /* Centers items horizontally */
+  width: 100%;
+  /* Other options for justify-content: flex-start, flex-end, space-between, space-around, space-evenly */
+}
+
+.item {
+  /* Styling for your individual divs */
+  padding: 20px;
+  border: 10px solid black;
+}

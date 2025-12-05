@@ -1,0 +1,30 @@
+<div class = "bookQuotes">
+      <div (click)="this.state = StateEnum.selector">
+      <img src="/assets/images/book_quotes.jpg" alt="Book Quotes" class="clickable mediumImage" title="Start from the beginning" />
+    </div>
+</div>
+<h1 class="centered">My Book Quotes</h1>
+<hr>
+
+@if (isAuthenticated()) {
+  <div class="centered">
+    @switch (state) {
+      @case (StateEnum.selector) {
+        <bq-selection (stateEvent)="updateState($event)"></bq-selection>
+      }
+      @case (StateEnum.authors) {
+        <bq-authors (stateEvent)="updateState($event)"></bq-authors>
+      }
+      @case (StateEnum.books) {
+        <bq-books (stateEvent)="updateState($event)"></bq-books>
+      }
+      @case (StateEnum.quotes) {
+        <bq-quotes (stateEvent)="updateState($event)"></bq-quotes>
+      }
+    }
+  </div>
+} @else {
+  <div class="centered">
+    <bq-login (refreshEvent)="refreshView()"></bq-login>
+  </div>
+}

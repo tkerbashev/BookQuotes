@@ -7,7 +7,7 @@ namespace BookQuotes.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route( "[controller]" )]
+    [Route( "api/[controller]" )]
     public class AuthorController( IRepository localRepository ) : ControllerBase
     {
         private readonly IRepository _localRepository = localRepository;

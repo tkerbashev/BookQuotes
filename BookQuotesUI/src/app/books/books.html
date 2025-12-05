@@ -1,0 +1,22 @@
+<div class="centered bold vSpaced">
+    List of all the books containing our quotes:
+</div>
+
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Author's First Name</th>
+        <th>Author's Last Name</th>
+    </tr>
+    @for (book of books; track book.title) {
+        <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.creator?.firstName }}</td>
+            <td>{{ book.creator?.lastName }}</td>
+        </tr>
+    }
+</table>
+
+<div class="centered smallFont vSpaced">
+    (Press the image on the top to go back.)
+</div>

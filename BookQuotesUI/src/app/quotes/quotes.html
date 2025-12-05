@@ -1,0 +1,24 @@
+<div class="centered bold vSpaced">
+    List of all the of our favourite quotes:
+</div>
+
+<table>
+    <tr>
+        <th>Quote</th>
+        <th>Book Title</th>
+        <th>Author's First Name</th>
+        <th>Author's Last Name</th>
+    </tr>
+    @for (quote of quotes; track quote.text) {
+        <tr>
+            <td>{{ quote.text }}</td>
+            <td>{{ quote.origin?.title }}</td>
+            <td>{{ quote.origin?.creator?.firstName }}</td>
+            <td>{{ quote.origin?.creator?.lastName }}</td>
+        </tr>
+    }
+</table>
+
+<div class="centered smallFont vSpaced">
+    (Press the image on the top to go back.)
+</div>

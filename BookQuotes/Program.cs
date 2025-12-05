@@ -1,4 +1,3 @@
-using BookQuotes;
 using BookQuotesRepository;
 using Microsoft.OpenApi;
 

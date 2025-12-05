@@ -1,0 +1,48 @@
+/* You can add global styles to this file, and also import other style files */
+.centered {
+    text-align: center;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.smallFont {
+    font-size: 0.8em;
+}
+
+.vSpaced {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.smallImage {
+    height: 100px;
+}
+
+.mediumImage {
+    height: 150px;
+}
+
+table {
+  width: 30%; /* Make the table span the full width */
+  border-collapse: collapse; /* Collapse borders for a cleaner look */
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+th, td {
+  border: 1px solid black; /* Add borders to all cells */
+  padding: 8px; /* Add some padding inside cells */
+  text-align: left; /* Align text to the left */
+}
+
+th {
+  background-color: #f2f2f2; /* Light grey background for headers */
+  font-weight: bold; /* Ensure headers are bold (default, but good to be explicit) */
+}

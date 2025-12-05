@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace BookQuotes.Controllers
 {
     [ApiController]
-    [Route( "[controller]" )]
+    [Route( "api/[controller]" )]
     public class AuthenticationController( IConfiguration configuration, IRepository localRepository ) : ControllerBase
     {
         private readonly IRepository _repository = localRepository;
