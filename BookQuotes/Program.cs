@@ -4,25 +4,75 @@ using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Load allowed origins from configuration (appsettings.json or environment variables)
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() 
+                     ?? ["http://localhost:4200"];
+
 // Add services to the container.
-
 builder.Services.AddControllers();
-//builder.Services.AddSingleton<IRepository, LocalRepository>( );
-builder.Services.AddSingleton<IRepository, DbRepository>( );
+// builder.Services.AddSingleton<IRepository, LocalRepository>();
+builder.Services.AddSingleton<IRepository, DbRepository>();
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen( c =>
+builder.Services.AddCors(options =>
 {
-    c.SwaggerDoc( "v1", new OpenApiInfo { Title = "My Book Quotes API", Version = "v1" } );
-    // Optional: Include XML comments for better documentation
-    // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    // c.IncludeXmlComments(xmlPath);
+    options.AddPolicy("AllowSpecificOrigin", policy =>
+    {
+        // If configuration specified "*" then allow any origin (no credentials)
+        if (allowedOrigins.Length == 1)
+        {
+            policy.WithOrigins( allowedOrigins )
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        }
+        else
+        {
+            // Use explicit origins when credentials are allowed
+            policy.WithOrigins(allowedOrigins)
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        }
+
+        // Cache preflight responses for 10 minutes
+        policy.SetPreflightMaxAge(TimeSpan.FromMinutes(10));
+    });
+
+    options.AddPolicy("AllowSpecificOriginNoCredentials", policy =>
+    {
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+
+    // Default permissive policy for non-production scenarios (use cautiously)
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+// OpenAPI / Swagger
+builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen(options =>
+{
+    // Add JWT bearer support in Swagger UI
+    options.AddSecurityDefinition( "Bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer", // Or "bearer" depending on provider
+        BearerFormat = "JWT", // Important for JWTs
+        In = ParameterLocation.Header,
+        Description = "Please insert JWT token",
+        Name = "Authorization"
+    } );
+
+    options.AddSecurityRequirement( document => new( ) { [ new OpenApiSecuritySchemeReference( "Bearer", document ) ] = [ ] } );
 } );
 
 builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer( options =>
+    .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
         {
@@ -30,37 +80,44 @@ builder.Services.AddAuthentication("Bearer")
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration[ "Authentication:Issuer" ],
-            ValidAudience = builder.Configuration[ "Authentication:Audience" ],
-            IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey
-            ( 
-                Convert.FromBase64String
-                ( 
-                    builder.Configuration[ "Authentication:SecretForKey" ] ?? throw new InvalidOperationException( "JWT Key not configured." )
-                ) 
+            ValidIssuer = builder.Configuration["Authentication:Issuer"],
+            ValidAudience = builder.Configuration["Authentication:Audience"],
+            IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+                Convert.FromBase64String(
+                    builder.Configuration["Authentication:SecretForKey"]
+                    ?? throw new InvalidOperationException("JWT Key not configured.")
+                )
             )
         };
-    } );
+    });
+
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.CheckConsentNeeded = context => false;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment( ))
+if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseSwagger( );
-    app.UseSwaggerUI( c =>
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint( "/swagger/v1/swagger.json", "My Book Quotes API V1" );
-        // Optional: Set a custom route prefix if needed
-        // c.RoutePrefix = string.Empty; // Access at root URL
-    } );
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Book Quotes API V1");
+    });
 }
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication( );
+app.UseRouting();
 
+// Important: apply CORS before authentication/authorization middleware
+app.UseCors("AllowSpecificOrigin");
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

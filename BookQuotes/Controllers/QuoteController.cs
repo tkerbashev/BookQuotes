@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookQuotes.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route( "api/[controller]" )]
     public class QuoteController( IRepository localRepository ) : ControllerBase
     {
