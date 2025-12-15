@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
-import { State, Author } from '../../common';
+import { Author } from '../../common';
 import { AuthorsService } from './authors-service';
 
 @Component({
@@ -9,8 +9,6 @@ import { AuthorsService } from './authors-service';
   styleUrl: './authors.css',
 })
 export class Authors {
-  @Output() stateEvent = new EventEmitter<State>();
-
   constructor( private authorsService: AuthorsService, private cdRef: ChangeDetectorRef) {}
 
   public authors: Author[] = [];
@@ -29,17 +27,5 @@ export class Authors {
         this.cdRef.detectChanges();
       }
     });
-  }
-
-  public state = State.selector;
-  public StateEnum = State;
-
-  public SetState(state: State): void {
-    this.state = state;
-    this.shareState();
-  }
-
-  shareState() {
-    this.stateEvent.emit(this.state);
   }
 }

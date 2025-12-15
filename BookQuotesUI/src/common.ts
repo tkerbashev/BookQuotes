@@ -1,10 +1,3 @@
-export enum State {
-    selector,
-    authors,
-    books, 
-    quotes,
-}
-
 export class Author {
     public firstName: string | undefined;
     public lastName: string | undefined;

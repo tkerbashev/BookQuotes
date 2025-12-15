@@ -2,12 +2,10 @@ import { Component } from '@angular/core';
 import { RouterLink } from "@angular/router";
 
 @Component({
-  selector: 'bq-selection',
+  selector: 'bq-site-header',
   imports: [RouterLink],
-  templateUrl: './selection.html',
-  styleUrl: './selection.css',
+  templateUrl: './site-header.html',
+  styleUrl: './site-header.css',
 })
-
-export class Selection {
-
+export class SiteHeader {
 }

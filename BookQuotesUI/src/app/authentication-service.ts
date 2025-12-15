@@ -17,7 +17,6 @@ export class AuthenticationService {
   }
 
   login(username: string, password: string, callback: () => void = () => {}) {
-    console.log('Attempting login for user: ' + username);
     try {
       this.getUserInfo(username, password, callback);
     }
@@ -29,7 +28,6 @@ export class AuthenticationService {
 
   getUserInfo(username: string, password: string, callback: () => void = () => {}): void {
     const credentials = { "username": username,  "password": password };
-    console.log('Sending credentials to server');
     this.httpClient.post('/api/Authentication/authenticate/', credentials).subscribe({
       next: (response) => {
         this.onSuccess(response);
@@ -47,13 +45,12 @@ export class AuthenticationService {
   private onSuccess(response: any) {
     this.bearerToken = response.token;
     this.isAuthenticated = true;
-    console.log('Login successful, token received');
   }
 
   private onError(error: any) {
     this.isAuthenticated = false;
     alert('Invalid username or password.');
-    console.log('Login failed:', error.status);
+    console.log('Login failed with status: ', error.status);
   }
 
   public getToken(): string {

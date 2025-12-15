@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Required for common directives like ngIf, ngFor
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // For form handling
 import { AuthenticationService } from '../authentication-service';
+import { Router, RouterLink } from "@angular/router";
 
 @Component({
   selector: 'bq-login',
@@ -15,13 +16,11 @@ export class Login {
   password = '';
   errorMessage = '';
 
-  @Output() refreshEvent = new EventEmitter<string>();
-
-  constructor(private authenticationService: AuthenticationService) {}
+  constructor(private authenticationService: AuthenticationService, private router: Router) {
+  }
 
   authenticate() {
-    // Using callback instead of returning observable in order to demonstrate the technique
-    this.authenticationService.login(this.username, this.password, () => this.refreshEvent.emit('refresh'));
+    this.authenticationService.login(this.username, this.password, () => {this.router.navigate(['/selection']);});
   }
 
 }
