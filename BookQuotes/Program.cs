@@ -1,5 +1,7 @@
 using BookQuotesRepository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi;
+using System.Net.Http.Headers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -89,7 +91,25 @@ builder.Services.AddAuthentication("Bearer")
                 )
             )
         };
-    });
+
+        // Custom logic to read token from "CustomAuthorization" header if "Authorization" is missing
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = ctx =>
+            {
+                ctx.Request.Headers.TryGetValue( "Authorization", out var BearerToken );
+                if (BearerToken.Count == 0)
+                {
+                    ctx.Request.Headers.TryGetValue( "CustomAuthorization", out var CustomBearerToken );
+                    if (CustomBearerToken.Count > 0)
+                    {
+                        ctx.Request.Headers.Append( "Authorization", CustomBearerToken[ 0 ] );
+                    }
+                }
+                return Task.CompletedTask;
+            },
+        };
+    } );
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {

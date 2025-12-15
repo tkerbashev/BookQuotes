@@ -18,16 +18,14 @@ export class Authors {
   ngOnInit() {
     this.authorsService.getAllAuthors().subscribe({
       next: (data) => {
-        console.log('Received authors data:', data);
         this.authors = data;
       },
       error: (error) => {
         if (error.status === 403) {
           alert('You are not authorised to list the authors!');
-        }        console.error('Error fetching authors:', error);
+        }
       },
       complete: () => {
-        console.log('Completed fetching authors');
         this.cdRef.detectChanges();
       }
     });
