@@ -19,8 +19,12 @@ export class Authors {
         this.authors = data;
       },
       error: (error) => {
+        console.log('Error while fetching the authors, status: ' + error.status);
         if (error.status === 403) {
           alert('You are not authorised to list the authors!');
+        }
+        if (error.status === 401) {
+          alert('Please log in first!');
         }
       },
       complete: () => {

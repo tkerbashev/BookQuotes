@@ -14,8 +14,6 @@ export class App {
   protected readonly title = signal('BookQuotesUI');
   private authenticationService: AuthenticationService = inject(AuthenticationService);
 
-  constructor(private cdRef: ChangeDetectorRef) {}
-
   public isAuthenticated(): boolean {
     return this.authenticationService.IsAuthenticated();
   }

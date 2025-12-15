@@ -5,6 +5,10 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AuthenticationService {
+  Logout() {
+    this.bearerToken = '';
+    this.isAuthenticated = false;
+  }
 
   constructor(private httpClient: HttpClient) {
   }

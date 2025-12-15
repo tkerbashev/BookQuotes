@@ -20,6 +20,9 @@ export class Quotes {
       },
       error: (error) => {
         console.error('Error fetching quotes:', error);
+        if (error.status === 401) {
+          alert('Please log in first!');
+        }
       },
       complete: () => {
         this.cdRef.detectChanges();

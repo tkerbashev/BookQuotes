@@ -19,8 +19,12 @@ export class Books {
         this.books = data;
       },
       error: (error) => {
+        console.log('Error while fetching the books, status: ' + error.status);
         if (error.status === 403) {
           alert('You are not authorised to list the books!');
+        }
+        if (error.status === 401) {
+          alert('Please log in first!');
         }
       },
       complete: () => {
