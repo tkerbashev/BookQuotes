@@ -39,3 +39,8 @@ button {
   color: red;
   margin-top: 10px;
 }
+
+.em.error-message {
+  color: red;
+  margin-top: 10px;
+}
